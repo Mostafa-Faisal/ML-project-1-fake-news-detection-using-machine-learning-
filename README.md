@@ -17,10 +17,10 @@ This project implements an AI-powered fake news detection system using advanced 
 ## 📸 Application Screenshots
 
 ### Main Interface
-![Main Interface](images/Screenshot_1.png)
+![Main Interface](Screenshot_1.png)
 
 ### Analysis Results
-![Analysis Results](images/Screenshot_2.png)
+![Analysis Results](Screenshot_2.png)
 
 ## 🛠️ Technology Stack
 
