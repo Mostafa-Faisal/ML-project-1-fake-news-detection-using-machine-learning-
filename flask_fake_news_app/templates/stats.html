@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+
+{% block title %}Statistics - Fake News Detection System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2><i class="fas fa-chart-bar"></i> System Statistics</h2>
+        <p class="text-muted">Comprehensive analytics of the fake news detection system</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Overview Cards -->
+    <div class="col-md-3 mb-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h2 class="fw-bold">{{ stats.total_analyses }}</h2>
+                        <p class="mb-0">Total Analyses</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h2 class="fw-bold">{{ stats.real_detected }}</h2>
+                        <p class="mb-0">Real News Detected</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h2 class="fw-bold">{{ stats.fake_detected }}</h2>
+                        <p class="mb-0">Fake News Detected</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h2 class="fw-bold">
+                            {% if stats.total_analyses > 0 %}
+                                {{ "%.1f"|format((stats.fake_detected / stats.total_analyses) * 100) }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </h2>
+                        <p class="mb-0">Fake News Rate</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-percentage fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Chart Section -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie"></i> Detection Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="detectionChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- System Info -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-cogs"></i> System Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong><i class="fas fa-robot"></i> AI Model:</strong><br>
+                    <small class="text-muted">BERT-based Classification</small>
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-database"></i> Database:</strong><br>
+                    <small class="text-muted">SQLite with SQLAlchemy</small>
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-server"></i> Backend:</strong><br>
+                    <small class="text-muted">Flask Framework</small>
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-clock"></i> Last Updated:</strong><br>
+                    <small class="text-muted">
+                        {% if stats.last_updated %}
+                            {{ stats.last_updated.strftime('%Y-%m-%d %H:%M:%S') }}
+                        {% else %}
+                            Never
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analysis Methods -->
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-brain"></i> Detection Methods
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-center p-3">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                 style="width: 60px; height: 60px;">
+                                <i class="fas fa-search fa-2x text-primary"></i>
+                            </div>
+                            <h6>Pattern Analysis</h6>
+                            <p class="small text-muted">Detects suspicious keywords and language patterns commonly found in fake news</p>
+                            <span class="badge bg-primary">40% Weight</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-3">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                 style="width: 60px; height: 60px;">
+                                <i class="fas fa-robot fa-2x text-success"></i>
+                            </div>
+                            <h6>BERT Analysis</h6>
+                            <p class="small text-muted">Uses transformer-based model for contextual understanding and token analysis</p>
+                            <span class="badge bg-success">20% Weight</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-3">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                 style="width: 60px; height: 60px;">
+                                <i class="fas fa-network-wired fa-2x text-warning"></i>
+                            </div>
+                            <h6>Pipeline Classification</h6>
+                            <p class="small text-muted">Utilizes pre-trained classification models for additional validation</p>
+                            <span class="badge bg-warning">40% Weight</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+{% if recent_analyses %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-clock"></i> Recent Activity
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Title</th>
+                                <th>Prediction</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for analysis in recent_analyses %}
+                            <tr>
+                                <td><small>{{ analysis.created_at.strftime('%H:%M') }}</small></td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 300px;">
+                                        {{ analysis.title }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge {% if analysis.prediction == 'Real' %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ analysis.prediction }}
+                                    </span>
+                                </td>
+                                <td>{{ "%.1f"|format(analysis.confidence * 100) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('history') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-history"></i> View Complete History
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Create detection distribution chart
+    const ctx = document.getElementById('detectionChart').getContext('2d');
+    
+    const realCount = {{ stats.real_detected }};
+    const fakeCount = {{ stats.fake_detected }};
+    const total = {{ stats.total_analyses }};
+    
+    if (total > 0) {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Real News', 'Fake News'],
+                datasets: [{
+                    data: [realCount, fakeCount],
+                    backgroundColor: [
+                        '#28a745',  // Green for real
+                        '#dc3545'   // Red for fake
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    } else {
+        // Show message when no data
+        ctx.canvas.parentElement.innerHTML = `
+            <div class="text-center py-5">
+                <i class="fas fa-chart-pie fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No Data Available</h5>
+                <p class="text-muted">Start analyzing news articles to see statistics</p>
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Analyze News
+                </a>
+            </div>
+        `;
+    }
+});
+</script>
+{% endblock %}

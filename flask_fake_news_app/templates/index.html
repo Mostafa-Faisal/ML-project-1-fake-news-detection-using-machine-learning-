@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Fake News Detection System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <!-- Header Section -->
+        <div class="hero-section bg-gradient-primary text-white rounded p-5 mb-4">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold">
+                    <i class="fas fa-shield-alt"></i> 
+                    AI-Powered Fake News Detection
+                </h1>
+                <p class="lead">
+                    Analyze news articles using advanced BERT-based Natural Language Processing
+                </p>
+                <div class="mt-3">
+                    <span class="badge bg-light text-dark me-2">
+                        <i class="fas fa-robot"></i> BERT Model
+                    </span>
+                    <span class="badge bg-light text-dark me-2">
+                        <i class="fas fa-brain"></i> Deep Learning
+                    </span>
+                    <span class="badge bg-light text-dark">
+                        <i class="fas fa-database"></i> Real-time Analysis
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Analysis Form -->
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-search"></i> Analyze News Article
+                </h4>
+            </div>
+            <div class="card-body">
+                <form id="analysisForm">
+                    <div class="mb-3">
+                        <label for="newsTitle" class="form-label">
+                            <i class="fas fa-heading"></i> News Title *
+                        </label>
+                        <input type="text" class="form-control" id="newsTitle" name="title" 
+                               placeholder="Enter the news article title..." required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="newsContent" class="form-label">
+                            <i class="fas fa-align-left"></i> Article Content *
+                        </label>
+                        <textarea class="form-control" id="newsContent" name="content" rows="8" 
+                                  placeholder="Paste the full news article content here..." required></textarea>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle"></i> 
+                            Include the complete article text for best analysis results
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search"></i> Analyze News Article
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" id="clearForm">
+                            <i class="fas fa-eraser"></i> Clear Form
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Example Articles -->
+                <div class="mt-4">
+                    <h6><i class="fas fa-lightbulb"></i> Try These Examples:</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-success btn-sm w-100 example-btn" 
+                                    data-type="real">
+                                <i class="fas fa-check-circle"></i> Real News Example
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-danger btn-sm w-100 example-btn" 
+                                    data-type="fake">
+                                <i class="fas fa-exclamation-triangle"></i> Fake News Example
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="mt-4" style="display: none;">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-chart-line"></i> Analysis Results
+                    </h4>
+                </div>
+                <div class="card-body" id="resultsContent">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- Quick Stats -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie"></i> Quick Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-12 mb-3">
+                        <h3 class="text-primary">{{ stats.total_analyses }}</h3>
+                        <small class="text-muted">Total Analyses</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">{{ stats.real_detected }}</h4>
+                        <small class="text-muted">Real News</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-danger">{{ stats.fake_detected }}</h4>
+                        <small class="text-muted">Fake News</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-cogs"></i> How It Works
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="step mb-3">
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-primary rounded-circle me-3">1</span>
+                        <small>Text preprocessing and tokenization</small>
+                    </div>
+                </div>
+                <div class="step mb-3">
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-primary rounded-circle me-3">2</span>
+                        <small>BERT-based feature extraction</small>
+                    </div>
+                </div>
+                <div class="step mb-3">
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-primary rounded-circle me-3">3</span>
+                        <small>Pattern analysis and classification</small>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-primary rounded-circle me-3">4</span>
+                        <small>Confidence score calculation</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Analyses -->
+        {% if recent_analyses %}
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-clock"></i> Recent Analyses
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for analysis in recent_analyses %}
+                <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                    <div class="flex-grow-1">
+                        <small class="fw-bold">{{ analysis.title[:30] }}...</small><br>
+                        <span class="badge {% if analysis.prediction == 'Real' %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ analysis.prediction }}
+                        </span>
+                        <small class="text-muted ms-2">{{ analysis.confidence * 100 }}% confident</small>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('history') }}" class="btn btn-sm btn-outline-primary">
+                        View All History
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+// Example articles data
+const examples = {
+    real: {
+        title: "Climate Change Research Shows Alarming Trends in Arctic Ice Loss",
+        content: "A comprehensive study published in the journal Nature Climate Change reveals that Arctic sea ice is disappearing at an unprecedented rate. The research, conducted by an international team of scientists from 15 institutions, analyzed satellite data spanning four decades. The findings indicate that summer Arctic sea ice extent has declined by 13% per decade since 1979. Dr. Sarah Mitchell, lead researcher at the National Ice Center, stated that the current rate of ice loss is far exceeding previous climate model predictions. The study utilized advanced satellite imagery and temperature measurements to track changes in ice thickness and coverage. The implications for global sea levels and weather patterns are significant, with potential impacts on coastal communities worldwide."
+    },
+    fake: {
+        title: "SHOCKING: Scientists Discover Miracle Cure That Big Pharma Doesn't Want You to Know!",
+        content: "URGENT UPDATE: A secret government study has revealed an AMAZING natural cure that can heal EVERY disease known to mankind! Doctors are FURIOUS about this incredible discovery because it threatens their billion-dollar industry! This ONE simple trick, discovered by ancient civilizations, can cure cancer, diabetes, heart disease, and even aging itself! The pharmaceutical companies have been hiding this information for DECADES, but we've obtained EXCLUSIVE access to this life-changing secret! Order now for just $19.99 and receive FREE shipping! WARNING: This offer may be removed at any time due to pressure from Big Pharma! Don't let them silence the TRUTH! Act NOW before it's too late!"
+    }
+};
+
+// Example button handlers
+document.querySelectorAll('.example-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const type = this.dataset.type;
+        const example = examples[type];
+        
+        document.getElementById('newsTitle').value = example.title;
+        document.getElementById('newsContent').value = example.content;
+        
+        // Scroll to form
+        document.getElementById('analysisForm').scrollIntoView({ behavior: 'smooth' });
+    });
+});
+</script>
+{% endblock %}
